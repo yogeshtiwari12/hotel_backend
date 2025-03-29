@@ -10,8 +10,8 @@ import payment from "./routes/paymentroutes.js"
 
 const app = express();
 
-
-mongoose.connect("mongodb+srv://yt781703:zo6bCtD2wa8Ffb7G@cluster0.x2rr6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+// mongodb+srv://yt781703:<db_password>@cluster0.4lvgqj3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+mongoose.connect("mongodb+srv://yt781703:zo6bCtD2wa8Ffb7G@cluster0.4lvgqj3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 
