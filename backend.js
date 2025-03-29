@@ -12,6 +12,8 @@ const app = express();
 
 
 mongoose.connect("mongodb+srv://yt781703:zo6bCtD2wa8Ffb7G@cluster0.x2rr6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 
 })
 .then(()=>{ // it return the promise
