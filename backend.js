@@ -11,7 +11,7 @@ import payment from "./routes/paymentroutes.js"
 const app = express();
 
 
-mongoose.connect("mongodb://localhost:27017/examportal", {
+mongoose.connect("mongodb+srv://yt781703:zo6bCtD2wa8Ffb7G@cluster0.x2rr6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
 
 })
 .then(()=>{ // it return the promise
@@ -25,7 +25,7 @@ app.use(cookieParser())
 
 
   app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://hotel-frontend-blush.vercel.app',
     credentials: true,
   }));
   
