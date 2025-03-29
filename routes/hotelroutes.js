@@ -17,8 +17,8 @@ route.get('/checkindata',verifytoken,isadmin("admin"),checkingetdata);
 route.post('/updatechekin/:id',verifytoken,isadmin("admin"),updatechekin); 
 
 
-route.get('/roomdetails_related_to_hotel/:id',roomdetails_related_to_hotel);  
-route.get('/hoteldetail',hoteldetails); 
+route.get('/roomdetails_related_to_hotel/:id',verifytoken,roomdetails_related_to_hotel);  
+route.get('/hoteldetail',verifytoken,hoteldetails); 
 route.get('/roomdata',roomdetails);
 route.get('/getallbookings',verifytoken,getallbookings)
 route.post("/setroom/:id",verifytoken,isadmin("admin"),setroom);

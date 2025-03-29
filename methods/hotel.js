@@ -20,10 +20,10 @@ export const savehotel = async (req, res) => {
     if (!allowedFormats.includes(fileFormat)) {
         return res.status(400).json({ message: "Invalid photo format" });
     }
-    const { hotelname, location, total_rooms, room_price, room_no } = req.body;
+    const { hotelname, location, total_rooms, room_price } = req.body;
 
     try {
-        if (!hotelname || !location || !total_rooms || !room_price || !room_no) {
+        if (!hotelname || !location || !total_rooms || !room_price) {
             return res.status(400).json({ message: "All fields are required" });
         }
         const userid = req.user.id;
@@ -33,7 +33,6 @@ export const savehotel = async (req, res) => {
             location,
             total_rooms,
             room_price,
-            room_no,
             userId: userid,
             hotel_image: {
                 public_id: uploadResponse.public_id,
@@ -145,7 +144,7 @@ export const getallbookings = async (req, res) => {
     res.json({ message: "All bookings fetched successfully", bookings: isuseravl });
 }
 
-export const  booksingleroom = async (req, res) => {
+export const booksingleroom = async (req, res) => {
     const hotelroombookingid = req.params.id;
 
     const { CheckInType } = req.body;
@@ -182,7 +181,7 @@ export const  booksingleroom = async (req, res) => {
             user_room_no: assignedRoomNo,
             total_price: updatedTotalPrice,
             CheckInType: CheckInType,
-            
+
         });
 
         await newBooking.save();
@@ -284,23 +283,24 @@ export const updatedetails = async (req, res) => {
 
 export const roomdetails_related_to_hotel = async (req, res) => {
     const hotelId = req.params.id;
-    console.log(hotelId)
+
+
     try {
 
-        const allroomdata = await Room.findOne({ hotelId })
-        const roomprice = await Hotel.findOne({ userId: req?.user?.id })
+    const allroomdata = await Room.findOne({ hotelId })
+    const roomprice = await Hotel.findOne({hotelname:allroomdata.hotelname})
 
-
-        if (!allroomdata) {
-            return res.status(404).json({ message: "Hotel related to room are not found" });
-        }
-        res.json({ message: "Data Fetced successfully", allroomdata: allroomdata, roomprice: roomprice.room_price });
+    if (!allroomdata) {
+        return res.status(404).json({ message: "Hotel related to room are not found" });
+    }
+    res.json({ message: "Data Fetced successfully", allroomdata: allroomdata, roomprice: roomprice.room_price });
 
     }
     catch (error) {
         res.status(500).json({ message: "Error retrieving room details", error: error.message });
     }
 }
+
 
 export const roomdetails = async (req, res) => {
     try {
@@ -323,45 +323,45 @@ export const checkingetdata = async (req, res) => {
         if (!userbooking_details) {
             return res.status(404).json({ message: "No booking details found" });
         }
-        const filterdata  = userbooking_details.map((details) => ({
-        
-               id: details.id,    
-               user_email: details.user_email,
-                user_name: details.user_name,
-                user_phone_number: details.user_phone_number,
-                user_hotel_name: details.user_hotel_name,
-                user_room_no: details.user_room_no,
-                total_price: details.total_price,
-                CheckInType: details.CheckInType,
-                CheckIn: details.CheckIn,
-                    
+        const filterdata = userbooking_details.map((details) => ({
+
+            id: details.id,
+            user_email: details.user_email,
+            user_name: details.user_name,
+            user_phone_number: details.user_phone_number,
+            user_hotel_name: details.user_hotel_name,
+            user_room_no: details.user_room_no,
+            total_price: details.total_price,
+            CheckInType: details.CheckInType,
+            CheckIn: details.CheckIn,
+
         }))
 
         res.json({
-        data:filterdata
-          
-            })
-    
+            data: filterdata
+
+        })
+
 
     } catch (error) {
         res.status(500).json({ message: "Error fetching booking details", error: error.message });
     }
 };
 
-   
-    
-export const updatechekin = async(req, res) => {
+
+
+export const updatechekin = async (req, res) => {
     const id = req.params.id;
-    const {CheckIn} = req.body
+    const { CheckIn } = req.body
     try {
-        const changechek_status = await Booking.findByIdAndUpdate(id,{CheckIn:CheckIn},{new: true} )
-        if(!changechek_status){
-            return res.status(404).json({ message:error.message });
+        const changechek_status = await Booking.findByIdAndUpdate(id, { CheckIn: CheckIn }, { new: true })
+        if (!changechek_status) {
+            return res.status(404).json({ message: error.message });
         }
         res.json({ message: "Check-in status updated successfully" })
     } catch (error) {
         res.status(500).json({ message: "Error updating check-in status", error: error.message })
-        
+
     }
 }
 
@@ -376,7 +376,7 @@ export const setroom = async (req, res) => {
         if (!hoteldata) {
             return res.status(404).json({ message: "Hotel not found" });
         }
-       
+
         hoteldata.user_room_no = roomno;
         await hoteldata.save();
         // console.log("room no ",hoteldata)

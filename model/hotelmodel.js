@@ -35,10 +35,7 @@ const hotelmodel = mongoose.Schema({
         }
     },
 
-    userId:{
-        type: mongoose.Schema.ObjectId,
-        ref:"User"
-    }
+   
 
 })
  

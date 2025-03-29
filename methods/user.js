@@ -86,7 +86,14 @@ export const login = async (req, res) => {
       }
 
 
-      res.cookie('token', token)
+      res.cookie('token', token,{
+        secure: true, // Set to true since Render uses HTTPS
+        sameSite: 'None', // Allows cross-site cookies with HTTPS
+        httpOnly: true,
+        secure: true, // Render uses HTTPS
+        sameSite: 'None',
+
+      })
 
       res.json({
         message: 'Logged in successfully',
@@ -125,7 +132,7 @@ export const getMyProfile = async (req, res) => {
     const bookingdetails = await Booking.find({ user_email: email });//Booking model me humne user_email pass kiya in place of email in usermodel to wo hotelname roomno total price bking model me 
     
 
-    // console.log(bookingdetails)
+   
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

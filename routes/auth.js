@@ -7,7 +7,7 @@ export const verifytoken = async (req, res, next) => {
     try {
         const token = req.cookies.token;
         if (!token) {
-            return res.status(401).json({ message: 'Token not found' });
+            return res.status(401).json({ message: 'Token not foundf' });
         }
         const decoded = jwt.verify(token, jwtkey);
         const user = await User.findById(decoded.id);
