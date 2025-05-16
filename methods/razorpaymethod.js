@@ -4,13 +4,13 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import Payment from "../model/payment_model.js";
 
-// Initialize Razorpay
+dotenv.config();
+
 const razorpay = new Razorpay({
-  key_id: "rzp_test_pWTyz7mheqVuPN",
-  key_secret: "egBqDudTjXSJSWqPBr6adyqM"
+  key_id: process.env.RAZORPAY_KEY_ID ,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Create a Razorpay order
 export async function createRazorpayOrder(req, res) {
   try {
     const { order_amount, customer_details } = req.body;
