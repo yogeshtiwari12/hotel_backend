@@ -43,7 +43,7 @@ export async function createRazorpayOrder(req, res) {
     if (order.id) {
       return res.status(200).json({ 
         order_id: order.id,
-        key_id: "rzp_test_pWTyz7mheqVuPN",
+        key_id: process.env.RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         notes: order.notes,
