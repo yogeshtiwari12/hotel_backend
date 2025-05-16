@@ -61,33 +61,93 @@ export async function createRazorpayOrder(req, res) {
 
 export async function verifyPayment(req, res) {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-
-    const generatedSignature = crypto
-      .createHmac("sha256", "egBqDudTjXSJSWqPBr6adyqM")
-      .update(razorpay_order_id + "|" + razorpay_payment_id)
-      .digest("hex");
-
-    if (generatedSignature !== razorpay_signature) {
-      return res.status(400).json({ error: "Invalid payment signature" });
-    }
-
-    const newPayment = new Payment({
-      order_id: razorpay_order_id,
-      payment_id: razorpay_payment_id,
-      signature: razorpay_signature,
-      created_at: new Date(),
-      order_amount: req.body.amount / 100, // Convert back from paise to rupees
-      order_currency: "INR",
-      customer_details: req.body.notes || {}
-    });
-
-    await newPayment.save();
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;    
     
-    return res.status(200).json({ 
-      message: "Payment verified and saved successfully", 
-      paymentId: razorpay_payment_id 
-    });
+    try {
+      const paymentDetails = await razorpay.orders.fetchPayments(razorpay_order_id);
+      
+      // Check if the payment exists and has been authorized/captured
+      const payment = paymentDetails.items.find(item => item.id === razorpay_payment_id);
+      
+      if (!payment) {
+        console.log(" not found in Razorpay records");
+        return res.status(400).json({ 
+          error: "Invalid payment",
+          details: "Payment not found in Razorpay records"
+        });
+      }
+      
+      if (payment.status !== 'captured' && payment.status !== 'authorized') {
+        console.log("Payment not successful, status:", payment.status);
+        return res.status(400).json({ 
+          error: "Payment verification failed",
+          details: `Payment status is ${payment.status}`
+        });
+      }
+     
+      const newPayment = new Payment({
+        order_id: razorpay_order_id,
+        payment_id: razorpay_payment_id,
+        signature: razorpay_signature,
+        created_at: new Date(),
+        order_amount: req.body.amount / 100, 
+        order_currency: "INR",
+        customer_details: req.body.notes || {},
+        payment_status: payment.status
+      });
+  
+      await newPayment.save();
+      
+      return res.status(200).json({ 
+        message: "Payment verified and saved successfully", 
+        paymentId: razorpay_payment_id,
+        status: payment.status
+      });
+      
+    } catch (razorpayError) {
+      console.error("Error fetching payment from Razorpay:", razorpayError);
+      
+      // Fallback to signature verification if API call fails
+      console.log("Falling back to signature verification...");
+      
+      // Create signature string and generate HMAC
+      const signatureString = razorpay_order_id + "|" + razorpay_payment_id;
+      console.log("Signature string:", signatureString);
+      
+      const generatedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET) 
+        .update(signatureString)
+        .digest("hex");
+      
+      // Compare signatures
+      console.log("Generated signature:", generatedSignature);
+      console.log("Razorpay signature:", razorpay_signature);
+      console.log("Signatures match:", generatedSignature === razorpay_signature);
+  
+      if (generatedSignature !== razorpay_signature) {
+        return res.status(400).json({ 
+          error: "Invalid payment signature",
+          details: "Signature verification failed. Please contact support."
+        });
+      }
+  
+      const newPayment = new Payment({
+        order_id: razorpay_order_id,
+        payment_id: razorpay_payment_id,
+        signature: razorpay_signature,
+        created_at: new Date(),
+        order_amount: req.body.amount / 100, 
+        order_currency: "INR",
+        customer_details: req.body.notes || {}
+      });
+  
+      await newPayment.save();
+      
+      return res.status(200).json({ 
+        message: "Payment verified and saved successfully (via signature)", 
+        paymentId: razorpay_payment_id 
+      });
+    }
   } catch (error) {
     console.error("Error verifying payment:", error);
     return res.status(500).json({ error: "Error verifying payment." });
