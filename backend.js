@@ -11,7 +11,7 @@ import payment from "./routes/paymentroutes.js"
 const app = express();
 
 
-mongoose.connect("mongodb://localhost:27017/examportal", {
+mongoose.connect("mongodb+srv://yt781703:pIGoNKqhC67O9fT7@cluster0.4lvgqj3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
 
 
 })
