@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const PaymentSchema = new mongoose.Schema(
   {
-    order_id: { type: String, required: true, unique: true }, // Unique order ID from Cashfree
-    created_at: { type: Date, required: true }, // Order creation timestamp
-    order_amount: { type: Number, required: true }, // Payment amount
-    order_currency: { type: String, default: "INR" }, // Currency (Default: INR)
+    order_id: { type: String, required: true, unique: true }, 
+    created_at: { type: Date, required: true }, 
+    order_amount: { type: Number, required: true }, 
+    order_currency: { type: String, default: "INR" },
 
     customer_details: {
       customer_id: { type: String, required: true },
