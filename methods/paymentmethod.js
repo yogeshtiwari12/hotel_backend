@@ -1,12 +1,10 @@
 
-import { Cashfree } from "cashfree-pg";
+
 import dotenv from "dotenv";
 import Payment from "../model/payment_model.js";
-dotenv.config();
 
-Cashfree.XClientId = process.env.CLIENT_ID;
-Cashfree.XClientSecret = process.env.CLIENT_SECRET;
-Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
+
+
 
 
 

@@ -13,6 +13,7 @@ const app = express();
 
 mongoose.connect("mongodb://localhost:27017/examportal", {
 
+
 })
 .then(()=>{ // it return the promise
   console.log("Connected to MongoDB", mongoose.connection.db.databaseName);
