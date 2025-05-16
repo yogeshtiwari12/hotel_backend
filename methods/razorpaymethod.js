@@ -7,7 +7,7 @@ import Payment from "../model/payment_model.js";
 dotenv.config();
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID ,
+  key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
@@ -27,7 +27,7 @@ export async function createRazorpayOrder(req, res) {
 
     // Create order options
     const options = {
-      amount: Math.round(order_amount * 100), // Razorpay expects amount in paise (multiply by 100)
+      amount: Math.round(order_amount * 100), 
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
       notes: {
