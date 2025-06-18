@@ -116,7 +116,11 @@ export const logout = (req, res) => {
     if (!token) {
       return res.json({ message: ' Token not found' });
     }
-    res.clearCookie('token');
+    res.clearCookie('token',{
+      httpOnly:true,
+      secure: true, // Render uses HTTPS
+      sameSite: 'None',
+    });
     res.json({ message: 'Logged out successfully' });
 
   } catch (error) {
