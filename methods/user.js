@@ -16,9 +16,9 @@ export const signup = async (req, res) => {
   if (!allowedFormats.includes(fileFormat)) {
     return res.status(400).json({ message: "Invalid photo format" });
   }
-  const { name, email, phone, password, role } = req.body;
+  const { name, email, phone, password } = req.body;
   try {
-    if (!name || !email || !phone || !password || !role) {
+    if (!name || !email || !phone || !password ) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const user = await User.findOne({ email });
@@ -40,7 +40,6 @@ export const signup = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      role,
       photo: {
         public_id: uploadResponse.public_id,
         url: uploadResponse.secure_url
