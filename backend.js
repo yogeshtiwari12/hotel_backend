@@ -28,7 +28,7 @@ app.use(cookieParser())
 
 
 app.use(cors({
-  origin: 'https://blog-site-frontend-three.vercel.app',
+  origin: 'https://hotel-frontend-blush.vercel.app',
   credentials: true
 }));
   app.use(express.json());
