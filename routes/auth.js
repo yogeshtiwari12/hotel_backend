@@ -1,6 +1,10 @@
 
 import jwt from "jsonwebtoken";
 import User from "../model/usermodel.js";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
 const jwtkey = "yogesh12345sGDSDSs"
 
 export const verifytoken = async (req, res, next) => {
