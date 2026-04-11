@@ -92,9 +92,9 @@ export const login = async (req, res) => {
         httpOnly: true,
         secure: true, // Render uses HTTPS
         sameSite: 'None',
-
       })
 
+    
       res.json({
         message: 'Logged in successfully',
         role:user.role
@@ -242,4 +242,7 @@ export const updatebookinguser = async (req, res) => {
     
   }
 }
+
+
+
 

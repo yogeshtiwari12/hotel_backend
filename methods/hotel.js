@@ -3,7 +3,7 @@ import cloudinary from 'cloudinary';
 import Hotel from "../model/hotelmodel.js";
 import Booking from "../model/bookings.js";
 import Room from "../model/room_model2.js";
-import { error } from "console";
+
 
 
 
@@ -247,17 +247,29 @@ export const hoteldetails = async (req, res) => {
         {
             $group: {
                 _id: null,
-                total: { $sum: "$total_price" }
+                total_amount: { $sum: "$total_price" },
+                total_bookings: { $sum: 1 },
+                checked_in_count: {
+                    $sum: {
+                        $cond: [{ $eq: ["$CheckIn", true] }, 1, 0]
+                    }
+                },
+                total_users: { $addToSet: "$user_email" }
             }
         }
     ]);
-    const total_price = totalPriceResult.length > 0 ? totalPriceResult[0].total : 0;
-
+    const total_price = totalPriceResult.length > 0 ? totalPriceResult[0].total_amount : 0;
+    const total_bookings = totalPriceResult.length > 0 ? totalPriceResult[0].total_bookings : 0;
+    const checked_in_count = totalPriceResult.length > 0 ? totalPriceResult[0].checked_in_count : 0;
+    const total_users = totalPriceResult.length > 0 ? totalPriceResult[0].total_users.length : 0;
 
     res.json({
         message: "All hotel data fetched successfully",
         hotel: hoteldata,
+        total_users,
         total_price,
+        total_bookings,
+        checked_in_count,
         id: hoteldata._id
     });
 }

@@ -7,17 +7,19 @@ import cookieParser from "cookie-parser";
 import hotelroutes from "./routes/hotelroutes.js"
 import userroutes from "./routes/userroutes.js"
 import payment from "./routes/paymentroutes.js"
+import User from "./model/usermodel.js";
 
 const app = express();
 
 
-mongoose.connect("mongodb://localhost:27017/examportal", {
+mongoose.connect("mongodb+srv://yt781703:pIGoNKqhC67O9fT7@cluster0.4lvgqj3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
 
 
 })
 .then(()=>{ // it return the promise
   console.log("Connected to MongoDB", mongoose.connection.db.databaseName);
 })
+
 .catch(err =>{
 console.log("Error connecting to MongoDB", err);
 })
@@ -25,11 +27,10 @@ app.use(cookieParser())
 
 
 
-  app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  }));
-  
+app.use(cors({
+  origin: 'https://blog-site-frontend-three.vercel.app',
+  credentials: true
+}));
   app.use(express.json());
 
 app.use(fileUpload({
