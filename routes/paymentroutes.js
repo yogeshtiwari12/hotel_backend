@@ -1,6 +1,6 @@
 import express from 'express';
 import { createRazorpayOrder, verifyPayment } from '../methods/razorpaymethod.js';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
 const router = express.Router();
 
