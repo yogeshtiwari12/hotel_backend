@@ -8,16 +8,18 @@ import hotelroutes from "./routes/hotelroutes.js"
 import userroutes from "./routes/userroutes.js"
 import payment from "./routes/paymentroutes.js"
 import User from "./model/usermodel.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const app = express();
 
-
-mongoose.connect("mongodb+srv://yt781703:pIGoNKqhC67O9fT7@cluster0.4lvgqj3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
-
+mongoose.connect(process.env.DATABASE_URL, {
 
 })
-.then(()=>{ // it return the promise
-  console.log("Connected to MongoDB", mongoose.connection.db.databaseName);
+.then(()=>{ 
+  console.log("Connected to MongoDB/Database", mongoose.connection.db.databaseName);
 })
 
 .catch(err =>{
@@ -28,10 +30,11 @@ app.use(cookieParser())
 
 
 app.use(cors({
-  origin: 'https://blog-site-frontend-three.vercel.app',
+  origin: 'https://hotel-frontend-blush.vercel.app',//https://hotel-frontend-blush.vercel.app/
   credentials: true
 }));
-  app.use(express.json());
+
+app.use(express.json());
 
 app.use(fileUpload({
   useTempFiles: true,
